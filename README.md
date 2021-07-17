@@ -88,7 +88,7 @@ Y con esta configuración preliminar ya se puede empezar a generar contenido rea
 
 #### CA (ca.crt)
 
-```sh
+```
 $ ./build-ca 
 Country Name (2 letter code) [US]:
 State or Province Name (full name) [California]:
