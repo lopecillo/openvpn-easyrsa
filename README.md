@@ -20,7 +20,7 @@ Este repositorio pretende simplificar los pasos indicados por la [documentación
 
 ### Instalar los paquetes necesarios
 
-```sh
+```
 $ apt install openssl openvpn easy-rsa
 ```
 
@@ -28,7 +28,7 @@ $ apt install openssl openvpn easy-rsa
 
 1. Copiar los ejemplos que incluye [Easy-RSA](https://openvpn.net/community-resources/rsa-key-management/).
 
-   ```sh
+   ```
    $ mkdir /etc/openvpn/easy-rsa
    $ cp -r /usr/share/easy-rsa/* /etc/openvpn/easy-rsa/
    $ cd /etc/openvpn/easy-rsa/
@@ -38,7 +38,7 @@ $ apt install openssl openvpn easy-rsa
 
 2. Variables de entorno
 
-   ```sh
+   ```
    $ cp vars.example vars
    $ vim vars
    ```
@@ -60,14 +60,14 @@ $ apt install openssl openvpn easy-rsa
 
    Aplicar los valores configurados y limpiar el directorio antes de empezar a trabajar:
 
-   ```sh
+   ```
    $ source ./vars
    $ ./clean-all
    ```
 
    > En algunos sistemas se puede tener el siguiente error:
    >
-   > ```sh
+   > ```
    > **************************************************************
    >   No /etc/openvpn/easy-rsa/openssl.cnf file could be found
    >   Further invocations will fail
@@ -76,8 +76,8 @@ $ apt install openssl openvpn easy-rsa
    >
    > En estos casos hay que indicar de manera explícita dónde está en nuestra distribución el fichero openssl.cnf
    >
-   > ```sh
-      > export KEY_CONFIG=`$EASY_RSA/whichopensslcnf $EASY_RSA`
+   > ```
+   > export KEY_CONFIG=`$EASY_RSA/whichopensslcnf $EASY_RSA`
    > ...
    > export KEY_CONFIG=/etc/openvpn/easy-rsa/openssl-1.0.0.cnf
    > ```
@@ -102,13 +102,13 @@ Email Address [me@example.net]:
 
 #### Servidor (server.crt)
 
-```sh
+```
 $ ./build-key-server <server_name>
 ```
 
 #### Cliente (client.crt)
 
-```sh
+```
 $ ./build-key-pass <client_name>
 ```
 
@@ -120,7 +120,7 @@ La autenticación TLS dará un plus de seguridad a nuestra configuración. Para 
 
 1. Cifrar la clave de cliente:
 
-   ```sh
+   ```
    $ cd keys/
    $ openssl rsa -in <client_name>.key -des3 -out <client_name>.3des.key
    $ cd ..
@@ -130,7 +130,7 @@ La autenticación TLS dará un plus de seguridad a nuestra configuración. Para 
 
    Este es, con diferencia, el paso más largo de todo el proceso:
 
-   ```sh
+   ```
    $ ./build-dh 
    ```
 
@@ -138,7 +138,7 @@ La autenticación TLS dará un plus de seguridad a nuestra configuración. Para 
 
 3. Clave para autenticación TLS (ta.key)
 
-   ```sh
+   ```
    $ openvpn --genkey --secret keys/ta.key
    ```
 
@@ -146,7 +146,7 @@ La autenticación TLS dará un plus de seguridad a nuestra configuración. Para 
 
 ### Configurar OpenVPN
 
-```sh
+```
 $ vim /etc/openvpn/server.conf
 ```
 
@@ -159,7 +159,7 @@ En [nuestro ejemplo](https://github.com/lopecillo/openvpn-easyrsa/blob/master/op
    iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o enp2s0 -j SNAT --to-source 192.168.1.100
    ```
 
-   ```sh
+   ```
    $ vim /etc/firewall-openvpn-rules.sh
    $ chmod 700 /etc/firewall-openvpn-rules.sh
    ```
@@ -168,11 +168,11 @@ En [nuestro ejemplo](https://github.com/lopecillo/openvpn-easyrsa/blob/master/op
 
    Configurar [las interfaces de red](https://github.com/lopecillo/openvpn-easyrsa/blob/master/openvpn/interfaces) para que las reglas de firewall se activen automáticamente al levantar la interfaz:
 
-   ```sh
+   ```
    pre-up /etc/firewall-openvpn-rules.sh
    ```
 
-   ```sh
+   ```
    $ vim /etc/network/interfaces
    ```
 
@@ -182,7 +182,7 @@ En [nuestro ejemplo](https://github.com/lopecillo/openvpn-easyrsa/blob/master/op
 
 Copiar las claves para el cliente:
 
-```sh
+```
 /etc/openvpn/easy-rsa/keys/ca.crt
 /etc/openvpn/easy-rsa/keys/<client_name>.crt
 /etc/openvpn/easy-rsa/keys/<client_name>.3des.key
@@ -193,6 +193,6 @@ Y volcar en un fichero `.ovpn`. Se puede tomar como modelo [este ejemplo](https:
 
 Salvando las distancias, el proceso es algo parecido a:
 
-```sh
+```
 $ cat openvpn_header.txt ca.crt <client_name>.crt <client_name>.3des.key ta.key > <client>.ovpn
 ```
